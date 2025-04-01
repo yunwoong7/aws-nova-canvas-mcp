@@ -31,7 +31,7 @@ async def text_to_image(
         cfg_scale: Image matching degree for the prompt (1-20)
         seed: Seed value for image generation
         open_browser: Whether to open the image in the browser after generation
-        output_path: Optional specific path to save the image
+        output_path: Absolute path to save the image
         
     Returns:
         Dict: Dictionary containing the file path of the generated image and the thumbnail image

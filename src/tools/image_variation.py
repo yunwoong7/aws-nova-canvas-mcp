@@ -1,19 +1,23 @@
-import json
 import base64
+import json
 from typing import Dict, Any, List
-from ..server import mcp, generate_image, ImageError, McpError
-from ..utils.image_storage import save_image
 
-@mcp.tool()
+from mcp import McpError
+
+from src.exceptions import ImageError
+from src.utils.bedrock import generate_image
+from src.utils.image_storage import save_image
+
+
 async def image_variation(
-    image_paths: List[str],
-    prompt: str = "",
-    negative_prompt: str = "",
-    similarity_strength: float = 0.7,
-    height: int = 512,
-    width: int = 512,
-    cfg_scale: float = 8.0,
-    output_path: str = None,
+        image_paths: List[str],
+        prompt: str = "",
+        negative_prompt: str = "",
+        similarity_strength: float = 0.7,
+        height: int = 512,
+        width: int = 512,
+        cfg_scale: float = 8.0,
+        output_path: str = None,
 ) -> Dict[str, Any]:
     """
     Generate a new variation of the input image while maintaining its content.
@@ -26,7 +30,7 @@ async def image_variation(
         height: Output image height (pixels)
         width: Output image width (pixels)
         cfg_scale: Prompt matching degree (1-20)
-        output_path: Optional specific path to save the image
+        output_path: Absolute path to save the image
         
     Returns:
         Dict: Dictionary containing the file path of the variation image
@@ -35,16 +39,16 @@ async def image_variation(
         # Validate image paths
         if len(image_paths) < 1 or len(image_paths) > 5:
             raise ImageError("image_paths list must contain 1-5 images.")
-        
+
         if similarity_strength < 0.2 or similarity_strength > 1.0:
             raise ImageError("similarity_strength must be between 0.2 and 1.0.")
-        
+
         # Read image files and encode to base64
         encoded_images = []
         for img_path in image_paths:
             with open(img_path, "rb") as image_file:
                 encoded_images.append(base64.b64encode(image_file.read()).decode('utf8'))
-        
+
         body = json.dumps({
             "taskType": "IMAGE_VARIATION",
             "imageVariationParams": {
@@ -60,22 +64,22 @@ async def image_variation(
                 "cfgScale": cfg_scale
             }
         })
-        
+
         # Generate image
         image_bytes = generate_image(body)
-        
+
         # Save image
         image_info = save_image(image_bytes, output_path=output_path)
-        
+
         # Generate result
         result = {
             "image_path": image_info["image_path"],
             "message": f"Image variation completed successfully. Saved location: {image_info['image_path']}"
         }
-        
+
         return result
-        
+
     except ImageError as e:
         raise McpError(str(e.message))
     except Exception as e:
-        raise McpError(f"Error occurred while image variation: {str(e)}") 
+        raise McpError(f"Error occurred while image variation: {str(e)}")
