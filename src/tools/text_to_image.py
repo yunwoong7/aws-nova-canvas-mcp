@@ -1,19 +1,23 @@
-from typing import Dict, Any
-from ..server import mcp, generate_image, ImageError, McpError
-from ..utils.image_storage import save_image
 import json
+from typing import Dict, Any
 
-@mcp.tool()
+from mcp import McpError
+
+from ..exceptions import ImageError
+from ..utils.bedrock import generate_image
+from ..utils.image_storage import save_image
+
+
 async def text_to_image(
-    prompt: str,
-    negative_prompt: str = "",
-    height: int = 1024,
-    width: int = 1024,
-    num_images: int = 1,
-    cfg_scale: float = 8.0,
-    seed: int = 0,
-    open_browser: bool = True,
-    output_path: str = None,
+        prompt: str,
+        negative_prompt: str = "",
+        height: int = 1024,
+        width: int = 1024,
+        num_images: int = 1,
+        cfg_scale: float = 8.0,
+        seed: int = 0,
+        open_browser: bool = True,
+        output_path: str = None,
 ) -> Dict[str, Any]:
     """
     Generate an image from a text prompt. After generation, you can use the show_image tool to view the thumbnail.
@@ -38,10 +42,10 @@ async def text_to_image(
             raise ImageError("Prompt cannot exceed 1024 characters.")
         if len(negative_prompt) > 1024:
             raise ImageError("Negative prompt cannot exceed 1024 characters.")
-            
+
         if num_images < 1 or num_images > 4:
             raise ImageError("num_images must be between 1 and 4.")
-        
+
         body = json.dumps({
             "taskType": "TEXT_IMAGE",
             "textToImageParams": {
@@ -56,22 +60,22 @@ async def text_to_image(
                 "seed": seed
             }
         })
-        
+
         # Generate image
         image_bytes = generate_image(body)
-        
+
         # Save image
         image_info = save_image(image_bytes, open_browser=open_browser, output_path=output_path)
-        
+
         # Generate result
         result = {
             "image_path": image_info["image_path"],
             "message": f"Image generated successfully. Saved location: {image_info['image_path']}"
         }
-        
+
         return result
-        
+
     except ImageError as e:
         raise McpError(str(e.message))
     except Exception as e:
-        raise McpError(f"Error occurred while generating image: {str(e)}") 
+        raise McpError(f"Error occurred while generating image: {str(e)}")
