@@ -33,6 +33,7 @@ dependencies = [
     { name = "boto3" },
     { name = "mcp", extra = ["cli"] },
     { name = "pillow" },
+    { name = "python-dotenv" },
     { name = "requests" },
 ]
 
@@ -41,6 +42,7 @@ requires-dist = [
     { name = "boto3", specifier = ">=1.37.23" },
     { name = "mcp", extras = ["cli"], specifier = ">=1.6.0" },
     { name = "pillow", specifier = ">=11.1.0" },
+    { name = "python-dotenv", specifier = ">=1.1.0" },
     { name = "requests", specifier = ">=2.32.3" },
 ]
 

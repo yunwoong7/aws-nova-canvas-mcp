@@ -60,12 +60,14 @@ git clone https://github.com/yunwoong/aws-nova-canvas-mcp.git
 ```
 
 5. Environment Variables Explanation
-   - **Required**:
+   - **Required** (choose one):
+     - `AWS_PROFILE`: AWS Profile Name
+     - or
      - `AWS_ACCESS_KEY_ID`: AWS Access Key ID
      - `AWS_SECRET_ACCESS_KEY`: AWS Secret Key
-     - `AWS_REGION`: AWS Region (default: `us-east-1`)
-
+     
    - **Optional**:
+     - `AWS_REGION`: AWS Region (default: `us-east-1`)
      - `PORT`: Port number for the server (default: `8000`)
      - `IMAGES_DIR`: Path where generated images will be saved (default: `nova_canvas_images` folder in the user's home directory)
      - `BEDROCK_MODEL_ID`: Model ID to use (default: `amazon.nova-canvas-v1:0`)

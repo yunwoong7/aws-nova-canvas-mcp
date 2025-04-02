@@ -8,5 +8,6 @@ dependencies = [
     "boto3>=1.37.23",
     "mcp[cli]>=1.6.0",
     "pillow>=11.1.0",
+    "python-dotenv>=1.1.0",
     "requests>=2.32.3",
 ]
