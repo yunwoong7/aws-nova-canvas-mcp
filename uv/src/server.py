@@ -1,16 +1,21 @@
 import logging
+import sys
+import os
+
+# Add parent directory to sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from mcp.server.fastmcp import FastMCP
 
-from src.config import get_app_config
-from src.tools.background_removal import background_removal
-from src.tools.color_guided_generation import color_guided_generation
-from src.tools.image_conditioning import image_conditioning
-from src.tools.image_variation import image_variation
-from src.tools.inpainting import inpainting
-from src.tools.outpainting import outpainting
-from src.tools.text_to_image import text_to_image
-from src.utils.image import get_image
+from uv.src.config import get_app_config
+from uv.src.tools.background_removal import background_removal
+from uv.src.tools.color_guided_generation import color_guided_generation
+from uv.src.tools.image_conditioning import image_conditioning
+from uv.src.tools.image_variation import image_variation
+from uv.src.tools.inpainting import inpainting
+from uv.src.tools.outpainting import outpainting
+from uv.src.tools.text_to_image import text_to_image
+from uv.src.utils.image import get_image
 
 # Set logging
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")

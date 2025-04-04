@@ -30,6 +30,6 @@ def get_app_config():
         has_keys = bool(config['access_key'] and config['secret_key'])
         
         if not (has_profile or has_keys):
-            raise ValueError("AWS credentials are not properly set. Either AWS_PROFILE or both AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY must be set.")
+            print("AWS credentials are not properly set. Either AWS_PROFILE or both AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY must be set.")
             
     return config 

@@ -39,41 +39,38 @@ git clone https://github.com/yunwoong/aws-nova-canvas-mcp.git
 <img src="https://blog.kakaocdn.net/dn/bIl5q9/btsM3U5Vjw5/aGruWqP3wNmWZ1sKrnhbPk/img.png" width="70%">
 </div>
 
-3. Add the following content to the settings file:
+3. Add the following content to the settings file (Python version):
 
-```json
-"nova-canvas": {
-  "command": "uv",
-  "args": [
-    "--directory",
-    "Path to clone folder",
-    "run",
-    "src/server.py"
-  ],
-  "env": {
-    "AWS_ACCESS_KEY_ID": "YOUR_AWS_ACCESS_KEY_ID",
-    "AWS_SECRET_ACCESS_KEY": "YOUR_AWS_SECRET_ACCESS_KEY",
-    "AWS_REGION": "us-east-1",
-    "PORT": "8000"
-  }
-}
-```
+   - python version
 
-5. Environment Variables Explanation
-   - **Required** (choose one):
-     - `AWS_PROFILE`: AWS Profile Name
-     - or
-     - `AWS_ACCESS_KEY_ID`: AWS Access Key ID
-     - `AWS_SECRET_ACCESS_KEY`: AWS Secret Key
-     
-   - **Optional**:
-     - `AWS_REGION`: AWS Region (default: `us-east-1`)
-     - `PORT`: Port number for the server (default: `8000`)
-     - `IMAGES_DIR`: Path where generated images will be saved (default: `nova_canvas_images` folder in the user's home directory)
-     - `BEDROCK_MODEL_ID`: Model ID to use (default: `amazon.nova-canvas-v1:0`)
-   
-   > ⚙️ If the setup is completed successfully, you can see that the "nova-canvas" item has been added in **Claude > Settings > Developer tab**.
-   > ⚠️ **Important:** MCP settings only work on the **Claude desktop app, not the Claude web browser version**
+     ```json
+     "nova-canvas": {
+       "command": "uv",
+       "args": [
+         "--directory",
+         "Path to clone folder",
+         "run",
+         "server.py"
+       ],
+       "env": {
+         "AWS_PROFILE": "YOUR_AWS_PROFILE"
+       }
+     }
+     ```
+
+     > ✅ Only AWS_PROFILE is required. Other variables like AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, and PORT are optional and not necessary if your AWS profile is set correctly.
+     >
+     > ​	⚙️ If the setup is completed successfully, you can see that the "nova-canvas" item has been added in **Claude > Settings > Developer tab**.
+     > ⚠️ **Important:** MCP settings only work on the **Claude desktop app, not the Claude web browser version**
+
+## Image Save Location
+
+By default, all generated or edited images will be saved in the following directory:
+
+* **macOS / Linux**:  `~/Desktop/aws-nova-canvas`
+* **Windows**:  `C:\Users\YourUsername\Desktop\aws-nova-canvas`
+
+> 📁 If no image save path is specified, the application will automatically create and use the folder above.
 
 <div align="center">
 <img src="https://blog.kakaocdn.net/dn/bpUWLj/btsM4kJZC6v/HHQfQctKsevWnK6LCKEkv0/img.png" width="70%">

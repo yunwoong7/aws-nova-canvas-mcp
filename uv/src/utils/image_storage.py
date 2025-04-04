@@ -25,14 +25,15 @@ def save_image(image_bytes: bytes, open_browser: bool = True, output_path: str =
         # Ensure directory exists
         os.makedirs(os.path.dirname(os.path.abspath(filepath)), exist_ok=True)
     else:
-        # Use home directory as default save location
-        default_dir = os.path.join(str(Path.home()), '.aws-nova-canvas', 'images')
-        os.makedirs(default_dir, exist_ok=True)
+        # Set default save path to desktop
+        desktop_path = Path.home() / 'Desktop' / 'aws-nova-canvas'
+        # Create directory if it doesn't exist
+        desktop_path.mkdir(parents=True, exist_ok=True)
         
         # Create unique file name using timestamp
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"image_{timestamp}.png"
-        filepath = os.path.join(default_dir, filename)
+        filepath = os.path.join(desktop_path, filename)
     
     # Save image to file
     with open(filepath, "wb") as f:
