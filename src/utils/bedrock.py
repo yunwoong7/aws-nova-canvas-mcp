@@ -5,8 +5,8 @@ import base64
 import boto3
 from botocore.exceptions import ClientError
 
-from config import get_app_config
-from ..exceptions import ImageError
+from src.config import get_app_config
+from src.exceptions import ImageError
 
 # Set logging
 logger = logging.getLogger(__name__)

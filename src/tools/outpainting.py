@@ -4,9 +4,9 @@ from typing import Dict, Any
 
 from mcp import McpError
 
-from uv.src.exceptions import ImageError
-from uv.src.utils.bedrock import generate_image
-from uv.src.utils.image_storage import save_image
+from src.exceptions import ImageError
+from src.utils.bedrock import generate_image
+from src.utils.image_storage import save_image
 
 
 async def outpainting(
