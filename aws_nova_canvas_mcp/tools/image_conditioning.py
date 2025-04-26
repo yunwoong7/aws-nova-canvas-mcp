@@ -4,38 +4,36 @@ from typing import Dict, Any
 
 from mcp import McpError
 
-from src.exceptions import ImageError
-from src.utils.bedrock import generate_image
-from src.utils.image_storage import save_image
+from ..exceptions import ImageError
+from ..utils.bedrock import generate_image
+from ..utils.image_storage import save_image
 
 
-async def inpainting(
+async def image_conditioning(
         image_path: str,
         prompt: str,
-        mask_prompt: str,
         negative_prompt: str = "",
+        control_mode: str = "CANNY_EDGE",
         height: int = 512,
         width: int = 512,
         cfg_scale: float = 8.0,
-        open_browser: bool = True,
         output_path: str = None,
 ) -> Dict[str, Any]:
     """
-    Inpaint a specific part of an image using a text mask prompt.
+    Generate an image that follows the layout and composition of a reference image.
     
     Args:
-        image_path: File path of the original image
-        prompt: Text prompt for the area to be inpainted
-        mask_prompt: Text prompt for specifying the area to be masked (e.g., "window", "car")
-        negative_prompt: Text prompt for excluding attributes from generation
+        image_path: File path of the reference image
+        prompt: Text describing the image to be generated
+        negative_prompt: Text specifying attributes to exclude from generation
+        control_mode: Control mode (CANNY_EDGE, etc.)
         height: Output image height (pixels)
         width: Output image width (pixels)
-        cfg_scale: Image matching degree for the prompt (1-20)
-        open_browser: Whether to open the image in the browser after generation
+        cfg_scale: Prompt matching degree (1-20)
         output_path: Absolute path to save the image
         
     Returns:
-        Dict: Dictionary containing the file path of the inpainted image
+        Dict: Dictionary containing the file path of the generated image
     """
     try:
         # Read image file and encode to base64
@@ -43,12 +41,12 @@ async def inpainting(
             input_image = base64.b64encode(image_file.read()).decode('utf8')
 
         body = json.dumps({
-            "taskType": "INPAINTING",
-            "inPaintingParams": {
+            "taskType": "TEXT_IMAGE",
+            "textToImageParams": {
                 "text": prompt,
                 "negativeText": negative_prompt,
-                "image": input_image,
-                "maskPrompt": mask_prompt
+                "conditionImage": input_image,
+                "controlMode": control_mode
             },
             "imageGenerationConfig": {
                 "numberOfImages": 1,
@@ -62,12 +60,12 @@ async def inpainting(
         image_bytes = generate_image(body)
 
         # Save image
-        image_info = save_image(image_bytes, open_browser=open_browser, output_path=output_path)
+        image_info = save_image(image_bytes, output_path=output_path)
 
         # Generate result
         result = {
             "image_path": image_info["image_path"],
-            "message": f"Inpainting completed successfully. Saved location: {image_info['image_path']}"
+            "message": f"Image conditioning completed successfully. Saved location: {image_info['image_path']}"
         }
 
         return result
@@ -75,4 +73,4 @@ async def inpainting(
     except ImageError as e:
         raise McpError(str(e.message))
     except Exception as e:
-        raise McpError(f"Error occurred while inpainting: {str(e)}")
+        raise McpError(f"Error occurred while image conditioning: {str(e)}")

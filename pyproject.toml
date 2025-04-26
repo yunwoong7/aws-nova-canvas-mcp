@@ -1,6 +1,6 @@
 [project]
 name = "aws-nova-canvas-mcp"
-version = "0.1.0"
+version = "0.1.4"
 description = "An MCP server that allows you to generate and edit images using the Nova Canvas model of Amazon Bedrock"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -10,3 +10,8 @@ dependencies = [
     "python-dotenv>=1.1.0",
     "requests>=2.32.3",
 ]
+
+[project.scripts]
+aws-nova-canvas-mcp = "aws_nova_canvas_mcp.server:main"
+
+

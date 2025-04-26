@@ -4,49 +4,59 @@ from typing import Dict, Any
 
 from mcp import McpError
 
-from src.exceptions import ImageError
-from src.utils.bedrock import generate_image
-from src.utils.image_storage import save_image
+from ..exceptions import ImageError
+from ..utils.bedrock import generate_image
+from ..utils.image_storage import save_image
 
 
-async def image_conditioning(
+async def outpainting(
         image_path: str,
+        mask_image_path: str,
         prompt: str,
         negative_prompt: str = "",
-        control_mode: str = "CANNY_EDGE",
+        outpainting_mode: str = "DEFAULT",
         height: int = 512,
         width: int = 512,
         cfg_scale: float = 8.0,
         output_path: str = None,
 ) -> Dict[str, Any]:
     """
-    Generate an image that follows the layout and composition of a reference image.
+    Expand the image to create an outpainting.
     
     Args:
-        image_path: File path of the reference image
-        prompt: Text describing the image to be generated
+        image_path: File path of the original image
+        mask_image_path: File path of the mask image
+        prompt: Text describing the content to be generated in the outpainting area
         negative_prompt: Text specifying attributes to exclude from generation
-        control_mode: Control mode (CANNY_EDGE, etc.)
+        outpainting_mode: Outpainting mode (DEFAULT or PRECISE)
         height: Output image height (pixels)
         width: Output image width (pixels)
         cfg_scale: Prompt matching degree (1-20)
         output_path: Absolute path to save the image
         
     Returns:
-        Dict: Dictionary containing the file path of the generated image
+        Dict: Dictionary containing the file path of the outpainted image
     """
     try:
+        # Validate outpainting mode
+        if outpainting_mode not in ["DEFAULT", "PRECISE"]:
+            raise ImageError("outpainting_mode must be 'DEFAULT' or 'PRECISE'.")
+
         # Read image file and encode to base64
         with open(image_path, "rb") as image_file:
             input_image = base64.b64encode(image_file.read()).decode('utf8')
 
+        with open(mask_image_path, "rb") as mask_file:
+            input_mask_image = base64.b64encode(mask_file.read()).decode('utf8')
+
         body = json.dumps({
-            "taskType": "TEXT_IMAGE",
-            "textToImageParams": {
+            "taskType": "OUTPAINTING",
+            "outPaintingParams": {
                 "text": prompt,
                 "negativeText": negative_prompt,
-                "conditionImage": input_image,
-                "controlMode": control_mode
+                "image": input_image,
+                "maskImage": input_mask_image,
+                "outPaintingMode": outpainting_mode
             },
             "imageGenerationConfig": {
                 "numberOfImages": 1,
@@ -65,7 +75,7 @@ async def image_conditioning(
         # Generate result
         result = {
             "image_path": image_info["image_path"],
-            "message": f"Image conditioning completed successfully. Saved location: {image_info['image_path']}"
+            "message": f"Outpainting completed successfully. Saved location: {image_info['image_path']}"
         }
 
         return result
@@ -73,4 +83,4 @@ async def image_conditioning(
     except ImageError as e:
         raise McpError(str(e.message))
     except Exception as e:
-        raise McpError(f"Error occurred while image conditioning: {str(e)}")
+        raise McpError(f"Error occurred while outpainting: {str(e)}")

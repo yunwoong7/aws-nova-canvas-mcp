@@ -24,12 +24,7 @@ An MCP server that allows you to generate and edit images using the Nova Canvas 
 
 ### Claude Desktop Setup
 
-1. Clone the repository
-```bash
-git clone https://github.com/yunwoong/aws-nova-canvas-mcp.git
-```
-
-2. Configure Claude Desktop
+1. Configure Claude Desktop
    * Click on **Claude > Settings** from the Claude Desktop menu.
    * When the popup appears, select **Developer** from the left menu, and click the **Edit Settings** button.
    * This will open a folder containing the settings file. The name of this settings file is:
@@ -45,12 +40,9 @@ git clone https://github.com/yunwoong/aws-nova-canvas-mcp.git
 
      ```json
      "nova-canvas": {
-       "command": "uv",
+       "command": "uvx",
        "args": [
-         "--directory",
-         "Path to clone folder",
-         "run",
-         "server.py"
+         "aws-nova-canvas-mcp"
        ],
        "env": {
          "AWS_PROFILE": "YOUR_AWS_PROFILE"
