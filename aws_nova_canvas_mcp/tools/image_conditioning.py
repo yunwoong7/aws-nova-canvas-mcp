@@ -70,7 +70,5 @@ async def image_conditioning(
 
         return result
 
-    except ImageError as e:
-        raise McpError(str(e.message))
     except Exception as e:
         raise McpError(f"Error occurred while image conditioning: {str(e)}")

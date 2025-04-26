@@ -80,7 +80,5 @@ async def outpainting(
 
         return result
 
-    except ImageError as e:
-        raise McpError(str(e.message))
     except Exception as e:
         raise McpError(f"Error occurred while outpainting: {str(e)}")

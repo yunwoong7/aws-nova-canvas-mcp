@@ -19,7 +19,7 @@ async def background_removal(
     Remove the background of an image automatically.
     
     Args:
-        image_path: File path of the original image
+        image_path: File path of the original image, Please use the actual local file path where the image is stored.
         output_path: Absolute path to save the image
         ctx: MCP context
         
@@ -52,7 +52,5 @@ async def background_removal(
 
         return result
 
-    except ImageError as e:
-        raise McpError(str(e.message))
     except Exception as e:
         raise McpError(f"Error occurred while removing background: {str(e)}")

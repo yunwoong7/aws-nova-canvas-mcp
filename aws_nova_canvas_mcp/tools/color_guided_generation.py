@@ -85,7 +85,5 @@ async def color_guided_generation(
 
         return result
 
-    except ImageError as e:
-        raise McpError(str(e.message))
     except Exception as e:
         raise McpError(f"Error occurred while generating image using color palette: {str(e)}")

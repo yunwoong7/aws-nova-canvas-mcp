@@ -25,13 +25,17 @@ MODEL_ID = conf['model_id']
 mcp = FastMCP("NovaCanvas Server", port=int(conf['port']))
 
 # Register tools with names and descriptions
-mcp.add_tool(text_to_image)
-mcp.add_tool(inpainting)
-mcp.add_tool(outpainting)
-mcp.add_tool(image_variation)
-mcp.add_tool(image_conditioning)
+mcp.add_tool(text_to_image, 
+             "text_to_image", 
+             """Generate an image from a text prompt using aws nova canvas model. 
+             If a color palette is specified, use the color_guided_generation tool first.""")
+# mcp.add_tool(inpainting)
+# mcp.add_tool(outpainting)
+# mcp.add_tool(image_variation)
+# mcp.add_tool(image_conditioning)
 mcp.add_tool(color_guided_generation)
 mcp.add_tool(background_removal)
+
 
 
 

@@ -20,7 +20,7 @@ async def text_to_image(
         output_path: str = None,
 ) -> Dict[str, Any]:
     """
-    Generate an image from a text prompt. After generation, you can use the show_image tool to view the thumbnail.
+    Generate an image from a text prompt. If a color palette is specified, use the color_guided_generation tool first.
     
     Args:
         prompt: Text prompt for generating an image (maximum 1024 characters)
@@ -75,7 +75,5 @@ async def text_to_image(
 
         return result
 
-    except ImageError as e:
-        raise McpError(str(e.message))
     except Exception as e:
         raise McpError(f"Error occurred while generating image: {str(e)}")

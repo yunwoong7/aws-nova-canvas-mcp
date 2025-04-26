@@ -72,7 +72,5 @@ async def inpainting(
 
         return result
 
-    except ImageError as e:
-        raise McpError(str(e.message))
     except Exception as e:
         raise McpError(f"Error occurred while inpainting: {str(e)}")
